@@ -1,15 +1,15 @@
 package com.qiuzhitech.onlineshopping_09.controller;
 
-import org.junit.jupiter.api.BeforeEach;
+import com.qiuzhitech.onlineshopping_09.config.MyUser;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.Spy;
-import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.setup.MockMvcBuilders;
+
+import javax.annotation.Resource;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.anyInt;
@@ -19,41 +19,41 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 /**
  * com.qiuzhitech.onlineshopping_09.controller.HelloController 单元测试
- * 使用 Mockito 对依赖进行 Mock，使用 MockMvc 测试 HTTP 接口
+ * 使用 @SpringBootTest 加载完整 Spring 上下文，通过 @Resource 注入真实 MyUser Bean，
+ * 使用 @MockBean 对 Dependency 进行 Mock，使用 MockMvc 测试 HTTP 接口
  */
-@ExtendWith(MockitoExtension.class)
+@SpringBootTest
+@AutoConfigureMockMvc
 @DisplayName("com.qiuzhitech.onlineshopping_09.controller.HelloController 单元测试")
 class HelloControllerTest {
 
-    @Mock
-    private Dependency dependency;
-
-    @InjectMocks
-    private HelloController helloController;
-
+    @Resource
     private MockMvc mockMvc;
 
-    @BeforeEach
-    void setUp() {
-        // 每个测试前初始化 MockMvc
-        mockMvc = MockMvcBuilders.standaloneSetup(helloController).build();
-    }
+    @MockBean
+    private Dependency dependency;
+
+    @Resource
+    private HelloController helloController;
+
+    @Resource(name = "Lyon")
+    MyUser myUser;
 
     // ==================== hello() 接口测试 ====================
 
     @Test
-    @DisplayName("GET /hello 应返回 'Hello World!'")
+    @DisplayName("GET /hello 应返回包含真实 MyUser(Lyon) 信息的字符串")
     void hello_shouldReturnHelloWorld() throws Exception {
         mockMvc.perform(get("/hello"))
                 .andExpect(status().isOk())
-                .andExpect(content().string("Hello World!"));
+                .andExpect(content().string("Hello Get World!" + myUser.toString()));
     }
 
     @Test
-    @DisplayName("hello() 方法直接调用应返回 'Hello World!'")
+    @DisplayName("hello() 方法直接调用应返回包含真实 MyUser(Lyon) 信息的字符串")
     void hello_directCall_shouldReturnHelloWorld() {
         String result = helloController.hello();
-        assertEquals("Hello World!", result);
+        assertEquals("Hello Get World!" + myUser.toString(), result);
     }
 
     // ==================== echo() 接口测试 ====================
@@ -92,7 +92,6 @@ class HelloControllerTest {
     @Test
     @DisplayName("sumPlug2() 使用真实 Dependency - 1+2+2 应等于 5")
     void sumPlug2_withRealDependency_shouldReturn5() {
-        // 使用真实的 Dependency 对象
         Dependency realDependency = new Dependency();
         HelloController controller = new HelloController(realDependency);
 
