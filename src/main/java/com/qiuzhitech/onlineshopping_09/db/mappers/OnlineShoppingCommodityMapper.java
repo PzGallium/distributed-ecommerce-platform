@@ -18,4 +18,6 @@ public interface OnlineShoppingCommodityMapper {
     int updateByPrimaryKey(OnlineShoppingCommodity record);
 
     List<OnlineShoppingCommodity> selectByUserId(long userId);
+
+    List<OnlineShoppingCommodity> listItems();
 }
