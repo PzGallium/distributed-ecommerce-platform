@@ -27,7 +27,7 @@ class OnlineShoppingCommodityDaoImplTest {
         OnlineShoppingCommodity  onlineShoppingCommodity =
                 OnlineShoppingCommodity.builder()
                         .commodityName("IphoneX")
-                        .creatorUserId(1L)
+                        .creatorUserId(124L)
                         .commodityDesc("desc")
                         .totalStock(100)
                         .availableStock(100)
@@ -40,7 +40,7 @@ class OnlineShoppingCommodityDaoImplTest {
     @Test
     void selectByCommodityId() {
         OnlineShoppingCommodity onlineShoppingCommodity = onlineShoppingCommodityDao.selectByCommodityId(123L);
-        log.info(onlineShoppingCommodity.toString());
+        //log.info(onlineShoppingCommodity.toString());
     }
 
 
@@ -50,3 +50,5 @@ class OnlineShoppingCommodityDaoImplTest {
         log.info(onlineShoppingCommodities.toString());
     }
 }
+
+

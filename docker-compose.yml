@@ -1,0 +1,32 @@
+version: '3.8'
+services:
+  app:
+    platform: linux/amd64
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "80:80"
+    depends_on:
+      - mysql
+  mysql:
+    image: mysql:8.0
+    platform: linux/amd64
+    environment:
+      MYSQL_ROOT_PASSWORD: Jaycee0303
+      MYSQL_DATABASE: online_shopping
+      MYSQL_USER: rootroot
+      MYSQL_PASSWORD: rootroot
+    ports:
+      - "3307:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
+      - ./init.sql:/docker-entrypoint-initdb.d/init.sql
+  redis:
+    platform: linux/amd64
+    image: redis:latest
+    ports:
+      - "6378:6379"
+
+volumes:
+  mysql_data:
