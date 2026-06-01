@@ -27,6 +27,7 @@ public class TestConsumerListener implements RocketMQListener<MessageExt>, Rocke
         defaultMQPushConsumer.setConsumeThreadMax(1);
         defaultMQPushConsumer.setConsumeThreadMin(1);
         defaultMQPushConsumer.setConsumeTimeout(1);
-        defaultMQPushConsumer.setMaxReconsumeTimes(2);
+        defaultMQPushConsumer.setMaxReconsumeTimes(2); //retry 2 times + 1
+        //to Dead Letter Queue if fail
     }
 }

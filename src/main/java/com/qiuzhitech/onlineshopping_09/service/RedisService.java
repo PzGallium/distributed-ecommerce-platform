@@ -64,4 +64,11 @@ public class RedisService {
                 Collections.singletonList(requestID));
         return (Long) result == 1L;
     }
+
+    public long reverStock(String key) {
+        Jedis jedis = jedisPool.getResource();
+        Long res = jedis.incr(key);
+        jedis.close();
+        return res;
+    }
 }

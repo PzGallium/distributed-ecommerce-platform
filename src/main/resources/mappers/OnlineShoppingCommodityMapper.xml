@@ -143,4 +143,9 @@
     where commodity_id = #{commodityId,jdbcType=BIGINT} and
       available_stock &gt; 0
   </update>
+  <update id="revertStock">
+    update online_shopping_commodity
+    set available_stock = available_stock + 1
+    where commodity_id = #{commodityId,jdbcType=BIGINT}
+  </update>
 </mapper>

@@ -5,6 +5,9 @@ import com.qiuzhitech.onlineshopping_09.db.dao.OnlineShoppingOrderDao;
 import com.qiuzhitech.onlineshopping_09.db.po.OnlineShoppingCommodity;
 import com.qiuzhitech.onlineshopping_09.db.po.OnlineShoppingOrder;
 import com.qiuzhitech.onlineshopping_09.service.OrderService;
+import org.apache.rocketmq.client.exception.MQBrokerException;
+import org.apache.rocketmq.client.exception.MQClientException;
+import org.apache.rocketmq.remoting.exception.RemotingException;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -26,8 +29,8 @@ public class OrderController {
     private OrderService orderService;
 
     @GetMapping("/commodity/buy/{userID}/{itemID}")
-    public String buyCommodity(@PathVariable Long userID, @PathVariable Long itemID, Map<String, Object> resultMap) {
-        OnlineShoppingOrder order = orderService.placeOrderByDistributedLock(userID, itemID);
+    public String buyCommodity(@PathVariable Long userID, @PathVariable Long itemID, Map<String, Object> resultMap) throws MQBrokerException, RemotingException, InterruptedException, MQClientException {
+        OnlineShoppingOrder order = orderService.placeOrderFinal(userID, itemID);
 
         if (order != null) {
             resultMap.put("resultInfo", "success");

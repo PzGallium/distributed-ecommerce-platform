@@ -58,4 +58,9 @@ public class OnlineShoppingCommodityDaoImpl implements OnlineShoppingCommodityDa
     public int deductStock(Long itemID) {
         return onlineShoppingCommodityMapper.deductStock(itemID);
     }
+
+    @Override
+    public int revertStock(long itemID) {
+        return onlineShoppingCommodityMapper.revertStock(itemID);
+    }
 }

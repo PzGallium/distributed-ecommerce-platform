@@ -1,11 +1,13 @@
 package com.qiuzhitech.onlineshopping_09.db.po;
 
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 
 import java.util.Date;
 @Data
 @Builder
+@AllArgsConstructor
 public class OnlineShoppingOrder {
     private Long orderId;
 
