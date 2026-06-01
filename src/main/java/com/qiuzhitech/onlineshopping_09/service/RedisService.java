@@ -1,5 +1,6 @@
 package com.qiuzhitech.onlineshopping_09.service;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import redis.clients.jedis.Jedis;
 import redis.clients.jedis.JedisPool;
@@ -7,6 +8,7 @@ import redis.clients.jedis.JedisPool;
 import javax.annotation.Resource;
 import java.util.Collections;
 
+@Slf4j
 @Service
 public class RedisService {
     @Resource
@@ -71,4 +73,29 @@ public class RedisService {
         jedis.close();
         return res;
     }
+
+    public void addToDenyList(String userID, String CommodityID) {
+        Jedis jedis = jedisPool.getResource();
+        String key = "online_shopping:DenyListUserID: "  + userID;
+        jedis.sadd(key, CommodityID);
+        jedis.close();
+        log.info("Add userID: {} to DenyList for commodityID: {}", userID, CommodityID);
+    }
+
+    public boolean isInDenyList(String userID, String CommodityID) {
+        Jedis jedis = jedisPool.getResource();
+        String key = "online_shopping_UserID: "  + userID;
+        Boolean sismember = jedis.sismember(key, CommodityID);
+        jedis.close();
+        return sismember;
+    }
+
+    public void removeFromDenyList(String userID, String CommodityID) {
+        Jedis jedis = jedisPool.getResource();
+        String key = "online_shopping_UserID: "  + userID;
+        jedis.srem(key, CommodityID);
+        jedis.close();
+        log.info("Remove userID: {} from DenyList for Commodity: {}", userID, CommodityID);
+    }
+
 }
