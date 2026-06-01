@@ -5,9 +5,11 @@ import com.qiuzhitech.onlineshopping_09.db.dao.OnlineShoppingOrderDao;
 import com.qiuzhitech.onlineshopping_09.db.po.OnlineShoppingCommodity;
 import com.qiuzhitech.onlineshopping_09.db.po.OnlineShoppingOrder;
 import com.qiuzhitech.onlineshopping_09.service.OrderService;
+import com.qiuzhitech.onlineshopping_09.service.RedisService;
 import org.apache.rocketmq.client.exception.MQBrokerException;
 import org.apache.rocketmq.client.exception.MQClientException;
 import org.apache.rocketmq.remoting.exception.RemotingException;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -27,12 +29,15 @@ public class OrderController {
     private OnlineShoppingOrderDao  onlineShoppingOrderDao;
     @Resource
     private OrderService orderService;
+    @Autowired
+    private RedisService redisService;
 
     @GetMapping("/commodity/buy/{userID}/{itemID}")
     public String buyCommodity(@PathVariable Long userID, @PathVariable Long itemID, Map<String, Object> resultMap) throws MQBrokerException, RemotingException, InterruptedException, MQClientException {
         OnlineShoppingOrder order = orderService.placeOrderFinal(userID, itemID);
 
         if (order != null) {
+            redisService.addToDenyList(String.valueOf(userID), String.valueOf(itemID));
             resultMap.put("resultInfo", "success");
             resultMap.put("orderNo", order.getOrderNo());
         } else {
