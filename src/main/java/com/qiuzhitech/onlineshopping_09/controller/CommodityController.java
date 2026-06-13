@@ -64,7 +64,7 @@ public class CommodityController {
 
     @GetMapping("searchAction")
     public String searchCommodity(@RequestParam("keyWord") String keyword, Map<String, Object> resultMap) {
-        List<OnlineShoppingCommodity> commodities = searchService.searchCommodityByDB(keyword);
+        List<OnlineShoppingCommodity> commodities = searchService.searchCommodityByES(keyword);
         resultMap.put("itemList", commodities);
         return "list_items";
     }
