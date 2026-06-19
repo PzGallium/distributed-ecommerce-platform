@@ -1,10 +1,10 @@
 package com.qiuzhitech.onlineshopping_09.service.mq;
 
 import com.alibaba.fastjson.JSON;
-import com.alibaba.fastjson.JSONObject;
 import com.qiuzhitech.onlineshopping_09.db.dao.OnlineShoppingCommodityDao;
 import com.qiuzhitech.onlineshopping_09.db.dao.OnlineShoppingOrderDao;
 import com.qiuzhitech.onlineshopping_09.db.po.OnlineShoppingOrder;
+import com.qiuzhitech.onlineshopping_09.config.UtilService;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.rocketmq.client.consumer.DefaultMQPushConsumer;
@@ -51,8 +51,8 @@ public class CreateOrderListener implements RocketMQListener<MessageExt>, Rocket
 
     @Override
     public void prepareStart(DefaultMQPushConsumer defaultMQPushConsumer) {
-        defaultMQPushConsumer.setConsumeThreadMax(1);
-        defaultMQPushConsumer.setConsumeThreadMin(1);
+        defaultMQPushConsumer.setConsumeThreadMax(10);
+        defaultMQPushConsumer.setConsumeThreadMin(10);
         defaultMQPushConsumer.setConsumeTimeout(1);
         defaultMQPushConsumer.setMaxReconsumeTimes(2); //retry 2 times + 1
         //to Dead Letter Queue if fail
