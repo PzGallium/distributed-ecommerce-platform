@@ -1,6 +1,7 @@
 package com.qiuzhitech.onlineshopping_09.service;
 
 import com.alibaba.fastjson.JSON;
+import com.qiuzhitech.onlineshopping_09.config.UtilService;
 import com.qiuzhitech.onlineshopping_09.db.dao.OnlineShoppingCommodityDao;
 import com.qiuzhitech.onlineshopping_09.db.dao.OnlineShoppingOrderDao;
 import com.qiuzhitech.onlineshopping_09.db.po.OnlineShoppingCommodity;
@@ -26,6 +27,8 @@ public class OrderService {
     private RedisService redisService;
     @Resource
     MQService mqService;
+    @Resource
+    UtilService utilService;
 
     public OnlineShoppingOrder createOrderSQL(Long userID, Long itemID) {
         int res = onlineShoppingCommodityDao.deductStock(itemID);
@@ -77,10 +80,12 @@ public class OrderService {
     }
 
     public OnlineShoppingOrder createOrder(Long userID, Long itemID, boolean shouldInsertDB) {
+        String orderId = String.valueOf(utilService.nextId());
         OnlineShoppingOrder order = OnlineShoppingOrder.builder()
                 .commodityId(itemID)
                 .userId(userID)
-                .orderNo(UUID.randomUUID().toString())
+                .orderNo(orderId)
+                .orderId(Long.valueOf(orderId))
                 .orderStatus(1) //1: pending 2: finish 99: invalid
                 .orderAmount(1L)
                 .createTime(new Date())
