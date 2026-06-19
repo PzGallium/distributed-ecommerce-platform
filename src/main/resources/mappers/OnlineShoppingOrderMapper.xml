@@ -135,6 +135,6 @@
     select
     <include refid="Base_Column_List" />
     from online_shopping_order
-    where order_no = #{orderNum,jdbcType=VARCHAR}
+    where order_no = #{orderNum,jdbcType=BIGINT} AND order_id = #{orderNum,jdbcType=BIGINT}
   </select>
 </mapper>
