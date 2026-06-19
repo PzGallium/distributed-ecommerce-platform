@@ -37,7 +37,7 @@ public class OrderController {
         OnlineShoppingOrder order = orderService.placeOrderFinal(userID, itemID);
 
         if (order != null) {
-            redisService.addToDenyList(String.valueOf(userID), String.valueOf(itemID));
+//            redisService.addToDenyList(String.valueOf(userID), String.valueOf(itemID));
             resultMap.put("resultInfo", "success");
             resultMap.put("orderNo", order.getOrderNo());
         } else {
